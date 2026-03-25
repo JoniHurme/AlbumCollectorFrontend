@@ -1,120 +1,161 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useEffect } from 'react'
 import './App.css'
+import { getAllRecords, addRecord, deleteRecord } from './api'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [records, setRecords] = useState([])
+  const [newRecord, setNewRecord] = useState({
+    artist: '',
+    title: '',
+    genre: '',
+    medium: '',
+    year: '',
+    favourite: false
+  })
+
+  useEffect(() => {
+    fetchRecords()
+  }, [])
+
+  const fetchRecords = async () => {
+    try {
+      const response = await getAllRecords()
+      setRecords(response.data)
+    } catch (error) {
+      console.error('Error fetching records:', error)
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target
+    setNewRecord({
+      ...newRecord,
+      [name]: type === 'checkbox' ? checked : value
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const recordToSubmit = {
+        ...newRecord,
+        year: parseInt(newRecord.year) || 0
+      }
+      await addRecord(recordToSubmit)
+      setNewRecord({
+        artist: '',
+        title: '',
+        genre: '',
+        medium: '',
+        year: '',
+        favourite: false
+      })
+      fetchRecords()
+    } catch (error) {
+      console.error('Error adding record:', error)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteRecord(id)
+      fetchRecords()
+    } catch (error) {
+      console.error('Error deleting record:', error)
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="App">
+      <h1>Album Collector</h1>
+      
+      <div className="form-container">
+        <h2>Add New Record</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              name="artist"
+              value={newRecord.artist}
+              onChange={handleInputChange}
+              placeholder="Artist"
+              required
+            />
+            <input
+              name="title"
+              value={newRecord.title}
+              onChange={handleInputChange}
+              placeholder="Title"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              name="genre"
+              value={newRecord.genre}
+              onChange={handleInputChange}
+              placeholder="Genre"
+            />
+            <input
+              name="medium"
+              value={newRecord.medium}
+              onChange={handleInputChange}
+              placeholder="Medium"
+            />
+            <input
+              name="year"
+              type="number"
+              value={newRecord.year}
+              onChange={handleInputChange}
+              placeholder="Year"
+            />
+          </div>
+          <div className="form-group checkbox-group">
+            <label>
+              Favourite
+              <input
+                name="favourite"
+                type="checkbox"
+                checked={newRecord.favourite}
+                onChange={handleInputChange}
+              />
+            </label>
+            <button type="submit">Add Record</button>
+          </div>
+        </form>
+      </div>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <div className="records-container">
+        <h2>Collection</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Artist</th>
+              <th>Title</th>
+              <th>Genre</th>
+              <th>Medium</th>
+              <th>Year</th>
+              <th>Favourite</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {records.map(record => (
+              <tr key={record.id}>
+                <td>{record.artist}</td>
+                <td>{record.title}</td>
+                <td>{record.genre}</td>
+                <td>{record.medium}</td>
+                <td>{record.year}</td>
+                <td>{record.favourite ? '★' : ''}</td>
+                <td>
+                  <button className="delete" onClick={() => handleDelete(record.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }
 
