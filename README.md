@@ -1,16 +1,52 @@
-# React + Vite
+# ALBUM COLLECTOR FrontEnd - Work in Progress
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Album Collector is a software that the user can use to track their music collection.
+Records can be added, modified and removed from the collection, and in the future additional details can be added. Such as limited editions, first editions, signatures and so on.
 
-Currently, two official plugins are available:
+Tech solutions:
+- Frontend is React (Vite)
+- - Frontend can be found here: https://github.com/JoniHurme/AlbumCollectorFrontend
+- Backend is Java Spring
+- Database is PostgreSQL
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+For now there is no simple way to showcase the application. You will need some know how so you can run it locally.
+- Clone the repository to your Java IDE
+- Clone the frontend to your frontend IDE
+- Create a PostgreSQL server and make sure the server details match the application.properties file
+- Start the PostgreSQL server
+- Start the frontend and the backend of the application in your IDE
+- Navigate to localhost:5173 in your browser
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Other stuff that needs doing:
+- Refactor components and elements
+- Sort and filter records
+- Add more detailed information for records.
+- Record wishlist that can be shared
+- Package the whole thing into a docker container
 
-## Expanding the ESLint configuration
+If you want to know what I will work on next, see the issues tab.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Troubleshooting
+
+Make sure the postgreSQL database has the following columns and types:
+- id `integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY`
+- artist `varchar(25)`
+- title `varchar(25)`
+- genre `varchar(25)`
+- favourite `boolean`
+- medium `varchar(8)`
+- year `integer`
+
+So you can just run the following with your table name:
+   ```
+       CREATE TABLE YOURTABLENAME(
+       id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+       artist VARCHAR(25),
+       title VARCHAR(25),
+       genre VARCHAR(25),
+       favourite BOOLEAN,
+       medium VARCHAR(8),
+       year INTEGER
+       )
+   
