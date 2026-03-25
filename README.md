@@ -5,8 +5,8 @@ Records can be added, modified and removed from the collection, and in the futur
 
 Tech solutions:
 - Frontend is React (Vite)
-- - Frontend can be found here: https://github.com/JoniHurme/AlbumCollectorFrontend
 - Backend is Java Spring
+- - Backend can be found here: https://github.com/JoniHurme/AlbumCollector
 - Database is PostgreSQL
 
 
