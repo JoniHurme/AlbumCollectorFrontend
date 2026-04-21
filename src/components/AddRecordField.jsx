@@ -7,17 +7,20 @@ function AddRecordField({ onAdd }) {
     genre: '',
     medium: '',
     year: '',
-    favourite: false
+    favourite: false,
+    collectionId: 1
   }
 
   const { values: newRecord, handleChange, reset } = useForm(initialValues)
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       const recordToSubmit = {
         ...newRecord,
-        year: parseInt(newRecord.year) || 0
+        year: parseInt(newRecord.year) || 0,
+        collectionId: parseInt(newRecord.collectionId) || 1
       }
       if (onAdd) {
         await onAdd(recordToSubmit)

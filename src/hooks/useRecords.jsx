@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
-import { getAllRecords, addRecord, deleteRecord } from '../api'
+import { addRecord, deleteRecord } from '../api/RecordsApi.js'
+import { getCollection} from "../api/CollectionApi.js";
 
 function useRecords() {
   const [records, setRecords] = useState([])
 
   const fetchRecords = useCallback(async () => {
     try {
-      const response = await getAllRecords()
-      setRecords(response.data)
+
+      // Try the api with getCollection
+      const response = await getCollection()
+      const data = response.data;
+      const recordsArray = Array.isArray(data)
+      ? data.flatMap(item => item.records || [])
+          : (data.records || data.collection || []);
+      setRecords(recordsArray)
     } catch (error) {
       console.error('Error fetching records:', error)
     }
