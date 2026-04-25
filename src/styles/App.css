@@ -6,7 +6,7 @@
 }
 
 .form-container {
-  background-color: #f4f4f4;
+  background-color: #2f2949;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -47,6 +47,31 @@ button:hover {
   margin-top: 20px;
 }
 
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #2f2949;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0;
+  color: #888;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  color: white;
+  border-bottom: 3px solid #007bff;
+}
+
+.tab:hover {
+  color: #ccc;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -59,11 +84,11 @@ th, td {
 }
 
 th {
-  background-color: #f8f9fa;
+  background-color: #2f2949;
 }
 
 tr:hover {
-  background-color: #f1f1f1;
+  background-color: #2f2949;
 }
 
 button.delete {

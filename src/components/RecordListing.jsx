@@ -1,7 +1,7 @@
 import RecordListingRow from "./RecordListingRow.jsx";
 import {useState, useMemo} from "react";
 
-function RecordListing({ records = [], onDelete }) {
+function RecordListing({ records = [], onDelete, view, onViewChange }) {
   
   const [sortColumn, setSortColumn] = useState('artist');
   const [sortDirection, setSortDirection] = useState('asc');
@@ -42,7 +42,20 @@ function RecordListing({ records = [], onDelete }) {
 
   return (
     <div className="records-container">
-      <h2>Collection</h2>
+      <div className="tabs">
+        <h2 
+          className={`tab ${view === 'collection' ? 'active' : ''}`} 
+          onClick={() => onViewChange('collection')}
+        >
+          Collection
+        </h2>
+        <h2 
+          className={`tab ${view === 'wishlist' ? 'active' : ''}`} 
+          onClick={() => onViewChange('wishlist')}
+        >
+          Wishlist
+        </h2>
+      </div>
       <table>
         <thead>
           <tr>

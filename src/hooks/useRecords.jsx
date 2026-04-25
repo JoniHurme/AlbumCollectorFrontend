@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { addRecord, deleteRecord } from '../api/RecordsApi.js'
 import { getCollection} from "../api/CollectionApi.js";
+import {getWishlist} from "../api/WishlistApi.js";
 
 function useRecords() {
   const [records, setRecords] = useState([])
+  const [view, setView] = useState('collection')
 
   const fetchRecords = useCallback(async () => {
     try {
-
-      // Try the api with getCollection
-      const response = await getCollection()
+      const response = view === 'collection' ? await getCollection() : await getWishlist()
       const data = response.data;
       const recordsArray = Array.isArray(data)
       ? data.flatMap(item => item.records || [])
@@ -18,7 +18,7 @@ function useRecords() {
     } catch (error) {
       console.error('Error fetching records:', error)
     }
-  }, [])
+  }, [view])
 
   useEffect(() => {
     fetchRecords()
@@ -42,7 +42,7 @@ function useRecords() {
     }
   }, [fetchRecords])
 
-  return { records, fetchRecords, handleAdd, handleDelete }
+  return { records, view, setView, handleAdd, handleDelete }
 }
 
 export default useRecords

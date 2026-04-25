@@ -8,7 +8,9 @@ function AddRecordField({ onAdd }) {
     medium: '',
     year: '',
     favourite: false,
-    collectionId: 1
+    wishlist: false,
+    collectionId: 1,
+    wishlistId: 1
   }
 
   const { values: newRecord, handleChange, reset } = useForm(initialValues)
@@ -17,11 +19,20 @@ function AddRecordField({ onAdd }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      const { wishlist, ...rest } = newRecord
       const recordToSubmit = {
-        ...newRecord,
+        ...rest,
         year: parseInt(newRecord.year) || 0,
-        collectionId: parseInt(newRecord.collectionId) || 1
       }
+
+      if (wishlist) {
+        recordToSubmit.wishlistId = parseInt(newRecord.wishlistId) || 1
+        delete recordToSubmit.collectionId
+      } else {
+        recordToSubmit.collectionId = parseInt(newRecord.collectionId) || 1
+        delete recordToSubmit.wishlistId
+      }
+
       if (onAdd) {
         await onAdd(recordToSubmit)
       }
@@ -79,6 +90,15 @@ function AddRecordField({ onAdd }) {
               name="favourite"
               type="checkbox"
               checked={newRecord.favourite}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            Wishlist
+            <input
+              name="wishlist"
+              type="checkbox"
+              checked={newRecord.wishlist}
               onChange={handleChange}
             />
           </label>
